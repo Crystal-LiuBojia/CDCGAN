@@ -85,7 +85,6 @@ def main():
     parser.add_argument('--fastmode', action='store_true', default=False,help='Validate during training pass.')
     parser.add_argument('--alpha', type=float, default=0.2, help='Alpha for the leaky_relu.')
     parser.add_argument('--patience', type=int, default=1000, help='Patience')
-    parser.add_argument('--nogan', type=bool, default=False, help='no gan')
 
     args = parser.parse_args()
     param = args.__dict__
@@ -164,13 +163,11 @@ def main():
                                    nlayer=4, nembed=args.nembed).to(device)
 
 
-    # 设置优化器
     optimizer_en = optim.Adam(encoder.parameters(), lr=args.lr_embed, weight_decay=args.weight_decay_embed)
     optimizer_g = optim.Adam(generator.parameters(), lr=args.lr_gan, weight_decay=args.weight_decay_gan)
     optimizer_d = optim.Adam(discriminator.parameters(), lr=args.lr_gan, weight_decay=args.weight_decay_gan)
 
 
-    # 把模型放到cuda上面
     generator = generator.to(device)
     discriminator = discriminator.to(device)
 
@@ -429,7 +426,7 @@ def latent_vector_sample(args, N, D, adj, labels, idx_train,num_per_class_list, 
             if i > labels.max().item() - num_im_class:
                 num_per_class_generate_list.append(int(num_per_class - num_per_class * im_ratio))
             else:
-                num_per_class_generate_list.append(num_per_class - num_per_class)  # 如果不是指定为少数类的类别，意思就是补充0个样本
+                num_per_class_generate_list.append(num_per_class - num_per_class)
     elif args.dataset == 'wiki-cs':
         mean0 = sum(num_per_class_list)/len(num_per_class_list)
         for i in range(labels.max().item()+1):
@@ -465,7 +462,7 @@ def latent_vector_sample(args, N, D, adj, labels, idx_train,num_per_class_list, 
                 latent_code = torch.cat((tmp_code, conditional_z),dim=0).to(device)
             else:
                 latent_code = torch.cat((conditional_z, N[label].repeat(num_generate, 1)), dim=1).to(device)
-                latent_code = torch.cat((tmp_code, latent_code), dim=0).to(device)  # 看看这个东西的维度是多少，是否需要用view函数调整维度 N*nembed
+                latent_code = torch.cat((tmp_code, latent_code), dim=0).to(device)
             idx_train_append = idx_train.new(np.arange(num_nodes, num_nodes + num_generate))
             idx_train = torch.cat((idx_train, idx_train_append), 0)
             idx_generated_list.append(idx_train_append)
