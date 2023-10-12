@@ -343,8 +343,8 @@ class GAT_Discriminator(nn.Module):
         logits = F.elu(self.classifier(x,adj))
         fakeorreal = F.elu(self.mlp1(x))
 
-        x_class = F.log_softmax(logits,dim=1)    # 这个地方要不要F.elu
-        x_fakereal = F.log_softmax(fakeorreal,dim=1)   # 这个地方改成log_softmax还是softmax
+        x_class = F.log_softmax(logits,dim=1)    
+        x_fakereal = F.log_softmax(fakeorreal,dim=1)   
 
         return logits, fakeorreal, x_class, x_fakereal
 
@@ -364,8 +364,8 @@ class GCN_Discriminator(nn.Module):
     def forward(self, x, adj):
         x = F.relu(self.gc1(x, adj))
         x = F.dropout(x, self.dropout, training=self.training)
-        x_class = F.log_softmax(F.elu(self.classifier(x, adj)), dim=1)  # 这个地方要不要F.elu
-        x_fakereal = F.log_softmax(F.elu(self.fakereal(x, adj)), dim=1)  # 这个地方改成log_softmax还是softmax
+        x_class = F.log_softmax(F.elu(self.classifier(x, adj)), dim=1)  
+        x_fakereal = F.log_softmax(F.elu(self.fakereal(x, adj)), dim=1)  
 
         return self.classifier(x,adj), x_class, x_fakereal, F.softmax(self.classifier(x,adj),dim=1)
 
@@ -384,8 +384,8 @@ class Sage_Discriminator(nn.Module):
     def forward(self, x, adj):
         x = F.relu(self.gc1(x, adj))
         x = F.dropout(x, self.dropout, training=self.training)
-        x_class = F.log_softmax(F.elu(self.classifier(x, adj)), dim=1)  # 这个地方要不要F.elu
-        x_fakereal = F.log_softmax(F.elu(self.fakereal(x, adj)), dim=1)  # 这个地方改成log_softmax还是softmax
+        x_class = F.log_softmax(F.elu(self.classifier(x, adj)), dim=1)  
+        x_fakereal = F.log_softmax(F.elu(self.fakereal(x, adj)), dim=1)  
 
         return self.classifier(x,adj), x_class, x_fakereal, F.softmax(self.classifier(x,adj),dim=1)
 
