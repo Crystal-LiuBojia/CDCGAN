@@ -37,7 +37,7 @@ def accuracy(output, labels, output_AUC):
 
     recall = sklearn.metrics.recall_score(labels.cpu().numpy(), preds.cpu().numpy(), average='macro')
     f1_score = sklearn.metrics.f1_score(labels.cpu().numpy(), preds.cpu().numpy(), average='macro')
-    AUC = sklearn.metrics.roc_auc_score(labels.cpu().numpy(), output_AUC.detach().cpu().numpy(),multi_class='ovr',average='macro')   # 或者ovr
+    AUC = sklearn.metrics.roc_auc_score(labels.cpu().numpy(), output_AUC.detach().cpu().numpy(),multi_class='ovr',average='macro')   
     acc = sklearn.metrics.accuracy_score(labels.cpu().numpy(), preds.cpu().numpy())
     precision = sklearn.metrics.precision_score(labels.cpu().numpy(), preds.cpu().numpy(), average='macro')
     return recall, f1_score, AUC, acc, precision
@@ -89,7 +89,7 @@ def src_upsample(features, labels, idx_train, adj, up_scale=1.0, im_class_num=3)
 
     features_append = deepcopy(features[chosen,:])
     labels_append = deepcopy(labels[chosen])
-    idx_train_append = idx_train.new(np.arange(adj.shape[0], adj.shape[0] + add_num))    # 就是比如有2708个节点，从2708往后new出新的地址块。
+    idx_train_append = idx_train.new(np.arange(adj.shape[0], adj.shape[0] + add_num))    
 
     features = torch.cat((features, features_append), 0)
     labels = torch.cat((labels, labels_append), 0)
@@ -105,10 +105,9 @@ def sample_from_the_distribution(args, distribution,embed, labels, idx_train, ad
         if i > labels.max().item() - num_im_class:
             num_per_class_list.append(int(num_per_class-num_per_class * im_ratio))
         else:
-            num_per_class_list.append(num_per_class-num_per_class)    # 如果不是指定为少数类的类别，意思就是补充0个样本
-
+            num_per_class_list.append(num_per_class-num_per_class)    
     total_generated = 0
-    label_onehot = F.one_hot(labels)  # 怎么改成条件生成对抗网络
+    label_onehot = F.one_hot(labels)  
     for label in range(labels.max().item() + 1):
         label = int(label)
         if label > labels.max().item() - num_im_class:
