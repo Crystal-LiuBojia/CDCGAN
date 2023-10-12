@@ -323,7 +323,7 @@ def main():
             loss_gen.backward()
             optimizer_g.step()
 
-            recall_train, acc_train, auc_train, f1_train, precision_train, perclass_train = utils.evaluation(logits=logits[idx_train],labels=labels[idx_train])   # 如果是label_new下面就会报错。
+            recall_train, acc_train, auc_train, f1_train, precision_train, perclass_train = utils.evaluation(logits=logits[idx_train],labels=labels[idx_train])   
             print("acc:{}, auc:{}, f1:{}".format(acc_train,auc_train,f1_train))
             recall_train_new, acc_train_new, auc_train_new, f1_train_new, precision_train_new, perclass_train_new = utils.evaluation(logits=logits[idx_train_new], labels=labels_new[idx_train_new])
             print("acc_new:{}, auc_new:{}, f1_new:{}".format(acc_train_new, auc_train_new, f1_train_new))
