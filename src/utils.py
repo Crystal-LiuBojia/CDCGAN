@@ -34,18 +34,7 @@ def evaluation(logits, labels):
 
 def accuracy(output, labels, output_AUC):
     preds = output.max(1)[1].type_as(labels)
-    """
-    这行代码的作用是根据模型的输出计算预测标签。具体解释如下：
 
-- output.max(1): 这个部分计算 output 张量沿着第二个维度的最大值。它返回一个包含两个张量的元组：最大值和它们对应的索引。
-- [1]: 这个部分选择元组中包含索引的张量。
-- type_as(labels): 这个部分确保选择的张量的数据类型与 labels 张量的数据类型相同。
-
-总结一下，这行代码通过找到 output 张量中最大值的索引，将其转换为与 labels 张量相同的数据类型，从而得到预测的标签。
-    """
-
-    ## roc_auc_score的官方文档https://scikit-learn.org/stable/modules/generated/sklearn.metrics.roc_auc_score.html?highlight=roc_auc_score#sklearn.metrics.roc_auc_score
-    ## Discriminator类返回的最后一个值，加softmax旨在做归一化。
     recall = sklearn.metrics.recall_score(labels.cpu().numpy(), preds.cpu().numpy(), average='macro')
     f1_score = sklearn.metrics.f1_score(labels.cpu().numpy(), preds.cpu().numpy(), average='macro')
     AUC = sklearn.metrics.roc_auc_score(labels.cpu().numpy(), output_AUC.detach().cpu().numpy(),multi_class='ovr',average='macro')   # 或者ovr
@@ -129,25 +118,21 @@ def sample_from_the_distribution(args, distribution,embed, labels, idx_train, ad
             if args.noise==False:
                 conditional_z = distribution[label].sample((num_generate,))
             else:
-                conditional_z = torch.FloatTensor(np.random.normal(0, 0.1, (num_generate,args.nembed)))   # 最开始是0.1
-            conditional_z = conditional_z.to(device)    # 看看这个东西的维度是多少，是否需要用view函数调整维度 N*nembed
-            latent_code = conditional_z.view(-1, args.nembed)  # *比如cora数据集，im——ratio0.5最后三个类就是10*nembed  应该是.确实是，所以这步可以没有
+                conditional_z = torch.FloatTensor(np.random.normal(0, 0.1, (num_generate,args.nembed)))   
+            conditional_z = conditional_z.to(device)    
+            latent_code = conditional_z.view(-1, args.nembed)  
             embed = torch.cat((embed,latent_code),dim=0)
-            #print("conditional_z的维度: {}".format(conditional_z.shape))
-            # print("latent_code的维度: {}".format(latent_code.shape))
-            # 更新训练集的id和label
+
             idx_train_append = idx_train.new(np.arange(num_nodes, num_nodes + num_generate))
             idx_train = torch.cat((idx_train, idx_train_append), 0)
-            # 更新num_nodes
+
             num_nodes = num_nodes + num_generate
             label_train_append = label * np.ones(num_generate)
             labels = torch.cat((labels,torch.Tensor(label_train_append).to(device)),0)
 
-    #print("idx_train和labels的形状{},{}".format(idx_train.shape, labels.shape))
     embed_generated = embed[(embed.shape[0]-total_generated):,:]
     idx_generated = idx_train[(idx_train.shape[0] - total_generated):]
 
-    #return idx_train_new, labels_new
     return embed, embed_generated, idx_generated, idx_train, labels
 
 
