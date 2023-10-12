@@ -53,7 +53,7 @@ def main():
     parser.add_argument('--im_ratio', type=float, default=0.5)
     parser.add_argument('--num_im_class', type=int, default=3, choices=[3, 3, 1, 14, 5 ])
 
-    parser.add_argument('--model', type=str, default='gcn', choices=['sage', 'gcn', 'gat'])  # 默认是sem
+    parser.add_argument('--model', type=str, default='gcn', choices=['sage', 'gcn', 'gat'])  
     parser.add_argument('--mode', type=str, default='discrete_edge', choices=['discrete_edge', 'continuous_edge'])
     parser.add_argument('--nhead', type=int, default=8)
 
