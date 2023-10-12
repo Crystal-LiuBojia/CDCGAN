@@ -97,7 +97,7 @@ def src_upsample(features, labels, idx_train, adj, up_scale=1.0, im_class_num=3)
 
     return features, labels, idx_train, new_adj.detach()
 # Sample from the distribution
-def sample_from_the_distribution(args, distribution,embed, labels, idx_train, adj, up_scale=1.0, num_per_class=20, num_im_class=3, im_ratio=0.5):   # im_class_num都是以cora数据集为标准的
+def sample_from_the_distribution(args, distribution,embed, labels, idx_train, adj, up_scale=1.0, num_per_class=20, num_im_class=3, im_ratio=0.5):   
     num_classes = len(set(labels.tolist()))
     num_nodes = adj.shape[0]
     num_per_class_list = []
