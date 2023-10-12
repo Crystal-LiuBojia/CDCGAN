@@ -327,7 +327,7 @@ def main():
             print("acc:{}, auc:{}, f1:{}".format(acc_train,auc_train,f1_train))
             recall_train_new, acc_train_new, auc_train_new, f1_train_new, precision_train_new, perclass_train_new = utils.evaluation(logits=logits[idx_train_new], labels=labels_new[idx_train_new])
             print("acc_new:{}, auc_new:{}, f1_new:{}".format(acc_train_new, auc_train_new, f1_train_new))
-            print('\033[0;30;46m Epoch: discriminator{:04d} generator:{:04d}, train_recall:{:.4f}, train_acc: {:.4f}, train_AUC:{:.4f}, train_f1:{:.4f}, train_precision:{:.4f}\033[0m'.format(i,j, recall_train_new, acc_train_new, auc_train_new, f1_train_new, precision_train_new))
+            print('\033[0;30;46m Epoch: generator{:04d} discriminator:{:04d}, train_recall:{:.4f}, train_acc: {:.4f}, train_AUC:{:.4f}, train_f1:{:.4f}, train_precision:{:.4f}\033[0m'.format(i,j, recall_train_new, acc_train_new, auc_train_new, f1_train_new, precision_train_new))
             filecontent = " Epoch:  generator:{%d}, discriminator:{%d},train_recall:{%f}, train_acc: {%f}, train_AUC:{%f}, train_f1:{%f}, train_precision:{%f}" %(i,j, recall_train_new, acc_train_new, auc_train_new, f1_train_new, precision_train_new)
             with open(filename, "a+") as f:
                 f.write(filecontent + '\n')
@@ -336,7 +336,7 @@ def main():
             loss_val, val_recall, val_acc, val_AUC, val_f1_score, val_precision = validate(args,discriminator, embed_new.detach(), edge_index_new,idx_val,idx_test,labels_new)
 
             print(
-            '\033[0;30;41m Epoch: discriminator{:04d} generator:{:04d}, val_recall:{:.4f}, val_acc: {:.4f}, val_AUC:{:.4f}, val_f1_score:{:.4f}, val_precision:{:.4f}\033[0m'.format(
+            '\033[0;30;41m Epoch: generator{:04d} discriminator:{:04d}, val_recall:{:.4f}, val_acc: {:.4f}, val_AUC:{:.4f}, val_f1_score:{:.4f}, val_precision:{:.4f}\033[0m'.format(
                 i, j, val_recall, val_acc, val_AUC, val_f1_score, val_precision))
             filecontent = " Epoch:  generator:{%d}, discriminator:{%d}, val_recall:{%f}, val_acc: {%f}, val_AUC:{%f}, val_f1_score:{%f}, val_precision:{%f}" % (
             i, j, val_recall, val_acc, val_AUC, val_f1_score, val_precision)
