@@ -1,5 +1,4 @@
 # CDCGAN
-Class Distribution-aware Conditional GAN-based Minority Augmentation for Imbalanced Node Classification
 ## Requirements
 This repository has been tested with the following packages:
 + Python == 3.7.13
